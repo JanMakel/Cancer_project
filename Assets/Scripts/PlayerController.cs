@@ -28,17 +28,17 @@ public class PlayerController : MonoBehaviour
         _rigidbody.AddForce(transform.forward * speed * verticalInput);
 
         
-         if (Mathf.Approximately(verticalInput, 0) && isOnTheGround)
+         if (Mathf.Approximately(verticalInput, 0))
         {
             _rigidbody.velocity = Vector3.zero;
         }
 
-        if( Mathf.Approximately(horizontalInput,0) && isOnTheGround)
+        if( Mathf.Approximately(horizontalInput,0))
         {
             _rigidbody.angularVelocity = Vector3.zero;
         }
         transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.Space) && isOnTheGround)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             jump();
         }
@@ -53,12 +53,8 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision othercollision)
+  private bool isGrounded()
     {
-
-        if (othercollision.gameObject.CompareTag("Ground"))
-        {
-            isOnTheGround = true;
-        }
+      return transform.Find("Grounded").GetComponent<Grounded>();
     }
 }
