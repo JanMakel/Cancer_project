@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - RedMush
+  - BlueMush
+  - GreenMush
+  - Bullet
+  - Spores
+  - MegaSpore
   layers:
   - Default
   - TransparentFX

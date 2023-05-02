@@ -11,13 +11,18 @@ public class PlayerController : MonoBehaviour
     private bool isOnTheGround;
     private float speed = 10f;
     private float rotationSpeed = 30f;
+    [SerializeField]private float playerLive;
+    private bool gameOver;
 
-
+    private int spores;
 
     
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        playerLive = 3;
+        gameOver = false;
+        spores = 0;
     }
 
     
@@ -57,4 +62,51 @@ public class PlayerController : MonoBehaviour
     {
       return transform.Find("Grounded").GetComponent<Grounded>();
     }
+
+
+    private void OnCollisionEnter(Collision otherCollider)
+    {
+        if (otherCollider.gameObject.CompareTag("RedMush"))
+        {
+            playerLive--;
+        }
+        else if (otherCollider.gameObject.CompareTag("GreenMush"))
+        {
+            playerLive--;
+        }
+        else if (otherCollider.gameObject.CompareTag("Bullet"))
+        {
+            playerLive--;
+        }
+        else if (otherCollider.gameObject.CompareTag("BlueMush"))
+        {
+            playerLive = playerLive - 2;
+        }
+        else if (otherCollider.gameObject.CompareTag("Spores"))
+        {
+            spores++;
+            Destroy(otherCollider.gameObject);
+        }
+        else if (otherCollider.gameObject.CompareTag("MegaSpore"))
+        {
+            spores = spores + 5;
+            Destroy(otherCollider.gameObject);
+        }
+    }
+
+
+    private void GameOver()
+    {
+        if(playerLive <= 0)
+        {
+            gameOver = true;
+            
+        }
+    }
+
+
+
+
+    
+
 }
