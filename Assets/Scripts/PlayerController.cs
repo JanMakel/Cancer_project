@@ -15,8 +15,16 @@ public class PlayerController : MonoBehaviour
     private bool gameOver;
 
     private int spores;
+    private Grounded groundedScript;
 
-    
+
+
+
+    private void Awake()
+    {
+        groundedScript = GetComponent<Grounded>();
+       
+    }
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -28,6 +36,18 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump();
+        }
+
+
+
+
+
+
+        /*
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         _rigidbody.AddForce(transform.forward * speed * verticalInput);
@@ -43,26 +63,22 @@ public class PlayerController : MonoBehaviour
             _rigidbody.angularVelocity = Vector3.zero;
         }
         transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            jump();
-        }
-
+        */
         
+
     }
 
     private void jump()
     {
-        isOnTheGround = false;
-        _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (groundedScript.GetIsGrounded())
+        {
+            _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+        
     }
 
 
-  private bool isGrounded()
-    {
-      return transform.Find("Grounded").GetComponent<Grounded>();
-    }
-
+ 
 
     private void OnCollisionEnter(Collision otherCollider)
     {
@@ -100,7 +116,6 @@ public class PlayerController : MonoBehaviour
         if(playerLive <= 0)
         {
             gameOver = true;
-            
         }
     }
 
