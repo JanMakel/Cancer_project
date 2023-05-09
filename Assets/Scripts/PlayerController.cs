@@ -11,9 +11,10 @@ public class PlayerController : MonoBehaviour
     private bool isOnTheGround;
     private float speed = 10f;
     private float rotationSpeed = 30f;
-    [SerializeField]private float playerLive;
+    [SerializeField] private float playerLive;
     private bool gameOver;
     private int spores;
+    private Grounded groundedScript;
 
     //Movimiento
     public float velocity = 5f;
@@ -22,7 +23,7 @@ public class PlayerController : MonoBehaviour
     Vector2 input;
     float angle;
     Quaternion targetrotation;
-    Transform cam; 
+    Transform cam;
 
 
 
@@ -49,9 +50,9 @@ public class PlayerController : MonoBehaviour
         angle = Mathf.Atan2(input.x, input.y);
         angle = Mathf.Rad2Deg * angle;
         angle += cam.eulerAngles.y;
-            
     }
-
+     
+     
 
     //Rotacion conforme al angulo calculado
     private void rotate()
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetrotation, turnspeed * Time.deltaTime); 
     }
 
-    //El jugador se movera siempre hacia su adelante
+     
     private void Move()
     {
         transform.position += transform.forward * velocity * Time.deltaTime;
@@ -87,19 +88,23 @@ public class PlayerController : MonoBehaviour
         
         
     }
+       
+        
+        
+
+    
 
     private void jump()
     {
-        isOnTheGround = false;
-        _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (groundedScript.GetIsGrounded())
+        {
+            _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+        
     }
 
 
-  private bool isGrounded()
-    {
-      return transform.Find("Grounded").GetComponent<Grounded>();
-    }
-
+ 
 
     private void OnCollisionEnter(Collision otherCollider)
     {
@@ -137,7 +142,6 @@ public class PlayerController : MonoBehaviour
         if(playerLive <= 0)
         {
             gameOver = true;
-            
         }
     }
 

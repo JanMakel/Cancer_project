@@ -5,15 +5,24 @@ using UnityEngine;
 public class Grounded : MonoBehaviour
 {
     [SerializeField] private LayerMask platformLayerMask;
-    public bool isGrounded;
+    private bool isGrounded;
 
 
-    private void OnTriggerStay(Collider collider)
+
+    public bool GetIsGrounded()
     {
+        return isGrounded;
+    }
+
+
+   
+    private void OnCollisionStay(Collision collider)
+    {
+        Debug.Log(collider.gameObject.layer); 
         isGrounded = collider != null && (((1 << collider.gameObject.layer) & platformLayerMask) != 0);
     }
 
-    private void OnTriggerExit(Collider collision)
+    private void OnCollisionExit(Collision collision)
     {
         isGrounded = false; 
     }
