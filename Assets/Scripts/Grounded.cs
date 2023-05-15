@@ -5,7 +5,7 @@ using UnityEngine;
 public class Grounded : MonoBehaviour
 {
     [SerializeField] private LayerMask platformLayerMask;
-    private bool isGrounded;
+    [SerializeField] private bool isGrounded;
 
 
 

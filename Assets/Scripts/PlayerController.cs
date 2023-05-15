@@ -25,12 +25,20 @@ public class PlayerController : MonoBehaviour
     Quaternion targetrotation;
     Transform cam;
 
-
-
+    //Dash
+    private bool canDash = true;
+    private bool isDashing;
+    private float dashingPower = 24f;
+    private float dashingTime = 0.2f;
+    private float dashingCooldown = 1f;
+    
+    [SerializeField] private TrailRenderer tr;
 
     void Start()
     {
         cam = Camera.main.transform;
+        groundedScript = GetComponent<Grounded>();
+        Debug.Log(gameObject.name);
         _rigidbody = GetComponent<Rigidbody>();
         playerLive = 3;
         gameOver = false;
@@ -71,6 +79,22 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GetInput();
+        if (isDashing)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump();
+        }
+
+        //Dash
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
+        
 
         if (Mathf.Abs(input.x) < 1 && Mathf.Abs(input.y) < 1) return;
 
@@ -78,13 +102,11 @@ public class PlayerController : MonoBehaviour
         rotate();
         Move();
 
+       
 
-        
-      
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            jump();
-        }
+
+
+       
         
         
     }
@@ -98,6 +120,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundedScript.GetIsGrounded())
         {
+            Debug.Log("Salto");
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
         
@@ -146,8 +169,22 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        Vector3 originalGravity = Physics.gravity;
+        Physics.gravity = Vector3.zero;
+        _rigidbody.velocity = transform.forward * dashingPower;
+        tr.emitting = true;
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;
+        _rigidbody.velocity = Vector3.zero;
+        Physics.gravity = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    }
 
-
-    
 
 }
