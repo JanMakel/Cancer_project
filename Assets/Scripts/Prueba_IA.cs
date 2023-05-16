@@ -111,6 +111,7 @@ public class Prueba_IA : MonoBehaviour
         //Esfera de vision
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, visionRange);
+        
         //Esfera de ataque
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, visionRange);
