@@ -28,11 +28,22 @@ public class PlayerController : MonoBehaviour
     //Dash
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 24f;
+    private float dashingPower = 100f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
     
     [SerializeField] private TrailRenderer tr;
+
+
+    //Bala
+    public Rigidbody bullet;
+    public float bulletSpeed;
+    
+
+
+
+
+
 
     void Start()
     {
@@ -102,7 +113,11 @@ public class PlayerController : MonoBehaviour
         rotate();
         Move();
 
-       
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Fire();
+        }
+
 
 
 
@@ -113,7 +128,11 @@ public class PlayerController : MonoBehaviour
        
         
         
-
+    private void Fire()
+    {
+        var clone = Instantiate(bullet, transform.position, transform.rotation);
+        clone.velocity = Vector3.forward * bulletSpeed;
+    }
     
 
     private void jump()
