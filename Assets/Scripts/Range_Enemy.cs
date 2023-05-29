@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-public class Prueba_IA : MonoBehaviour
+public class Range_Enemy : MonoBehaviour
 {
 
-    [SerializeField] private Transform destination; 
+    [SerializeField] private Transform destination;
     [SerializeField] private Transform player;
 
     private NavMeshAgent _agent;
-    private float visionRange = 40f;
-    private float attackRange = 5f;
+    private float visionRange = 120f;
+    private float attackRange = 100f;
 
-    [SerializeField]private bool playerInVisionRange;
+    [SerializeField] private bool playerInVisionRange;
     [SerializeField] private bool playerInAttackRange;
 
     [SerializeField] private LayerMask playerLayer;
@@ -22,7 +22,7 @@ public class Prueba_IA : MonoBehaviour
     private int nextPoint;
 
     [SerializeField] private GameObject bullet;
-    private float timeBetweenAttacks;
+    private float timeBetweenAttacks = 2f;
     private bool canAttack;
     [SerializeField] private float upAttackForce = 15f;
     [SerializeField] private float forwardAttackForce = 18f;
@@ -48,39 +48,38 @@ public class Prueba_IA : MonoBehaviour
         playerInAttackRange = Physics.CheckSphere(pos, attackRange, playerLayer);
         //_agent.SetDestination(destination.position);
 
-
-        if(!playerInVisionRange && !playerInAttackRange)
+        /*
+        if (!playerInVisionRange && !playerInAttackRange)
         {
             Patrol();
         }
-
-        if(playerInVisionRange && !playerInAttackRange)
+        */
+        if (playerInVisionRange && !playerInAttackRange)
         {
             Chase();
         }
 
-        if(playerInAttackRange && playerInVisionRange)
+        if (playerInAttackRange && playerInVisionRange)
         {
             Attack();
         }
     }
 
-
+    /*
     private void Patrol()
     {
-        if (Vector3.Distance(transform.position, waypoints[nextPoint].position) < 10)
+        if (Vector3.Distance(transform.position, waypoints[nextPoint].position) < 1)
         {
             nextPoint++;
-            if(nextPoint == totalWaypoints)
+            if (nextPoint == totalWaypoints)
             {
                 nextPoint = 0;
             }
             transform.LookAt(waypoints[nextPoint].position);
-            _agent.SetDestination(waypoints[nextPoint].position);
         }
-       ;
+        _agent.SetDestination(waypoints[nextPoint].position);
     }
-
+    */
     private void Chase()
     {
         _agent.SetDestination(player.position);
@@ -90,8 +89,7 @@ public class Prueba_IA : MonoBehaviour
     private void Attack()
     {
         _agent.SetDestination(transform.position);
-
-        /*
+        transform.LookAt(player);
         if (canAttack)
         {
             Rigidbody rigidbody = Instantiate(bullet, spwanPoint.position, Quaternion.identity).GetComponent<Rigidbody>();
@@ -102,24 +100,24 @@ public class Prueba_IA : MonoBehaviour
             canAttack = false;
             StartCoroutine(AttackCoolDown());
         }
-        */
     }
-    /*
+
     private IEnumerator AttackCoolDown()
     {
         yield return new WaitForSeconds(timeBetweenAttacks);
         canAttack = true;
     }
-      */
 
-        private void OnDrawGizmos()
+
+    private void OnDrawGizmos()
     {
         //Esfera de vision
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, visionRange);
-        
+
         //Esfera de ataque
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, visionRange);
     }
 }
+

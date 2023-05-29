@@ -37,12 +37,13 @@ public class PlayerController : MonoBehaviour
 
     //Bala
     public Rigidbody bullet;
-    public float bulletSpeed;
-    
+    public float bulletSpeed = 1f;
+    public Vector3 bulletOffset;
+    private bool canFire;
 
+    //Player en los límites del mapa
 
-
-
+    private float rangeZ = 15f;
 
 
     void Start()
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         playerLive = 3;
         gameOver = false;
+        canFire = true;
         spores = 0;
     }
 
@@ -95,6 +97,11 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.F) && canFire)
+        {
+            StartCoroutine(Fire());
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jump();
@@ -113,13 +120,10 @@ public class PlayerController : MonoBehaviour
         rotate();
         Move();
 
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Fire();
-        }
+        
 
 
-
+        PlayerInBounds();
 
        
         
@@ -128,10 +132,13 @@ public class PlayerController : MonoBehaviour
        
         
         
-    private void Fire()
+    private IEnumerator Fire()
     {
-        var clone = Instantiate(bullet, transform.position, Quaternion.identity);
-        clone.velocity = Vector3.forward * bulletSpeed;
+        canFire = false;
+        var clone = Instantiate(bullet, transform.position + bulletOffset, Quaternion.identity);
+        clone.velocity = transform.forward * bulletSpeed;
+        yield return new WaitForSeconds(2f);
+        canFire = true;
     }
     
 
@@ -205,5 +212,17 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
 
+    private void PlayerInBounds()
+    {
+        Vector3 pos = transform.position;
+        if (pos.z < -rangeZ)
+        {
+            transform.position = new Vector3(pos.x, pos.y, -rangeZ);
+        }
 
+        if (pos.z > rangeZ)
+        {
+            transform.position = new Vector3(pos.x, pos.y, rangeZ);
+        }
+    }
 }
