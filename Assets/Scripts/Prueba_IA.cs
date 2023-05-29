@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class Prueba_IA : MonoBehaviour
 {
 
-    [SerializeField] private Transform destination;
+    [SerializeField] private Transform destination; 
     [SerializeField] private Transform player;
 
     private NavMeshAgent _agent;
@@ -38,9 +38,10 @@ public class Prueba_IA : MonoBehaviour
         totalWaypoints = waypoints.Length;
         nextPoint = 1;
         canAttack = true;
+        _agent.SetDestination(waypoints[0].position);
     }
 
-    private void Update()
+    /*private void Update()
     {
         Vector3 pos = transform.position;
         playerInVisionRange = Physics.CheckSphere(pos, visionRange, playerLayer);
@@ -105,6 +106,7 @@ public class Prueba_IA : MonoBehaviour
         yield return new WaitForSeconds(timeBetweenAttacks);
         canAttack = true;
     }
+    */
 
     private void OnDrawGizmos()
     {

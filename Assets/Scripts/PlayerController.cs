@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
         
     private void Fire()
     {
-        var clone = Instantiate(bullet, transform.position, transform.rotation);
+        var clone = Instantiate(bullet, transform.position, Quaternion.identity);
         clone.velocity = Vector3.forward * bulletSpeed;
     }
     
