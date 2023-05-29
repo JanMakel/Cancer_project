@@ -9,25 +9,30 @@ public class Buttons : MonoBehaviour
 {
     //TO CHANGE SCENES
 
-    public void MoveToScene(string scene)
+    public void MoveToScene()
     {
-        SceneManager.LoadScene(scene);
+        SceneManager.LoadScene("Levels");
     }
 
 
 
-    /*public void SceneStart ()
+    public void SceneStart ()
     {
         SceneManager.LoadScene("Start");
     }
-    public void Scene2()
+    public void Settings()
     {
         SceneManager.LoadScene("Settings");
     }
-    public void Scene3()
+    
+    public void Level1()
     {
-        SceneManager.LoadScene("Levels");
-    }*/
+        SceneManager.LoadScene("SampleScene");
+    }
+    public void Level2()
+    {
+        SceneManager.LoadScene("Level2");
+    }
 }   
 
     

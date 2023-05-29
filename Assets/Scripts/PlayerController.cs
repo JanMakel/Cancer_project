@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
 
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     //Dash
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 100f;
+    public float dashingPower = 100f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
     
@@ -120,11 +120,15 @@ public class PlayerController : MonoBehaviour
         rotate();
         Move();
 
-        
 
 
+        GameOver();
         PlayerInBounds();
 
+        if (gameOver == true)
+        {
+            StartCoroutine(Dead());
+        }
        
         
         
@@ -180,7 +184,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (otherCollider.gameObject.CompareTag("MegaSpore"))
         {
-            spores = spores + 5;
+            spores = spores += 5;
             Destroy(otherCollider.gameObject);
         }
     }
@@ -224,5 +228,14 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(pos.x, pos.y, rangeZ);
         }
+    }
+
+
+    private IEnumerator Dead()
+    {
+        //Antes de esto va la animacion de muerte si llega a funcionar algún día
+        yield return new WaitForSeconds(5);      
+        SceneManager.LoadScene("Game Over");
+
     }
 }
