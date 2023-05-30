@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     //Player en los límites del mapa
 
     private float rangeZ = 15f;
+    private float rangeZ2 = 25f;
 
 
     void Start()
@@ -122,13 +123,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-        GameOver();
+       
         PlayerInBounds();
 
-        if (gameOver == true)
-        {
-            StartCoroutine(Dead());
-        }
+       
        
         
         
@@ -141,7 +139,7 @@ public class PlayerController : MonoBehaviour
         canFire = false;
         var clone = Instantiate(bullet, transform.position + bulletOffset, Quaternion.identity);
         clone.velocity = transform.forward * bulletSpeed;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         canFire = true;
     }
     
@@ -163,40 +161,39 @@ public class PlayerController : MonoBehaviour
     {
         if (otherCollider.gameObject.CompareTag("RedMush"))
         {
-            playerLive--;
+            TakeDamage(1);
         }
         else if (otherCollider.gameObject.CompareTag("GreenMush"))
         {
-            playerLive--;
+            TakeDamage(1);
         }
         else if (otherCollider.gameObject.CompareTag("Bullet"))
         {
-            playerLive--;
+            TakeDamage(1);
         }
         else if (otherCollider.gameObject.CompareTag("BlueMush"))
         {
-            playerLive = playerLive - 2;
+            TakeDamage(2);
         }
-        else if (otherCollider.gameObject.CompareTag("Spores"))
+        else if (otherCollider.gameObject.CompareTag("SporeB"))
         {
             spores++;
             Destroy(otherCollider.gameObject);
         }
-        else if (otherCollider.gameObject.CompareTag("MegaSpore"))
+        else if (otherCollider.gameObject.CompareTag("SporeS"))
         {
             spores = spores += 5;
+            Destroy(otherCollider.gameObject);
+        }
+        else if (otherCollider.gameObject.CompareTag("SporeO"))
+        {
+            spores = spores += 10;
             Destroy(otherCollider.gameObject);
         }
     }
 
 
-    private void GameOver()
-    {
-        if(playerLive <= 0)
-        {
-            gameOver = true;
-        }
-    }
+   
 
 
     private IEnumerator Dash()
@@ -237,5 +234,14 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(5);      
         SceneManager.LoadScene("Game Over");
 
+    }
+
+    private void TakeDamage(int damage)
+    {
+        playerLive -= damage;
+        if(playerLive <= 0)
+        {
+            StartCoroutine(Dead());
+        }
     }
 }

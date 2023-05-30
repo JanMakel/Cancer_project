@@ -8,7 +8,11 @@ public class Teleporter : MonoBehaviour
 
 
 
-    
+    private IEnumerator TimerTp()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Level2");
+    }
 
 
 
@@ -16,9 +20,9 @@ public class Teleporter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-         
-            
-            SceneManager.LoadScene("Level2");
+
+        StartCoroutine(TimerTp());
+          
         
     }
     

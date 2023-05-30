@@ -9,8 +9,9 @@ TagManager:
   - BlueMush
   - GreenMush
   - Bullet
-  - Spores
-  - MegaSpore
+  - SporeB
+  - SporeS
+  - SporeO
   layers:
   - Default
   - TransparentFX
