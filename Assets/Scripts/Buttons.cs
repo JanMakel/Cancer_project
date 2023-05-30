@@ -33,6 +33,11 @@ public class Buttons : MonoBehaviour
     {
         SceneManager.LoadScene("Level2");
     }
+
+    public void Controls()
+    {
+        SceneManager.LoadScene("Controls");
+    }
 }   
 
     

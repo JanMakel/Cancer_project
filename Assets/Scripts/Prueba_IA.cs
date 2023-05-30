@@ -78,7 +78,7 @@ public class Prueba_IA : MonoBehaviour
             transform.LookAt(waypoints[nextPoint].position);
             _agent.SetDestination(waypoints[nextPoint].position);
         }
-       ;
+       
     }
 
     private void Chase()
