@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1335174212881823077}
   m_Layer: 0
   m_Name: coleccionable_2
-  m_TagString: Untagged
+  m_TagString: SporeS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

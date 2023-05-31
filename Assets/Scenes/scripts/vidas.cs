@@ -43,31 +43,31 @@ public class vidas : MonoBehaviour
         if (lives < 1)
         {
 
-            hearts[0].transform.Find("explosion_01");
+            
            
             hearts[0].gameObject.SetActive(false);
-            GetComponent<ParticleSystem>().Play();
-            explosionParticle01.Play();
+            
+            
 
         }
 
         if (lives < 2)
         {
 
-            hearts[1].transform.Find("explosion_02");
+            
             
             hearts[1].gameObject.SetActive(false);
-            explosionParticle02.Play();
+           
 
         }
 
         if (lives < 3)
         {
 
-            hearts[2].transform.Find("explosion_03");
+            
             
             hearts[2].gameObject.SetActive(false);
-            explosionParticle03.Play();
+           
 
         }
     

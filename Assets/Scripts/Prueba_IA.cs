@@ -122,4 +122,13 @@ public class Prueba_IA : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, visionRange);
     }
+
+    private void OnCollisionEnter(Collision othercollision)
+    {
+        if (othercollision.gameObject.CompareTag("proyectil"))
+        {
+            Destroy(othercollision.gameObject);
+            Destroy(gameObject);
+        }
+    }
 }

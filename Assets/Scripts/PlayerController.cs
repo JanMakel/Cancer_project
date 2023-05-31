@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro; 
 public class PlayerController : MonoBehaviour
 {
 
@@ -11,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool isOnTheGround;
     private float speed = 10f;
     private float rotationSpeed = 30f;
-    [SerializeField] private float playerLive;
+    
     private bool gameOver;
     private int spores;
     private Grounded groundedScript;
@@ -44,19 +45,31 @@ public class PlayerController : MonoBehaviour
     //Player en los límites del mapa
 
     private float rangeZ = 15f;
-    private float rangeZ2 = 25f;
+
+    //Vidas y UI
+
+    public GameObject[] hearts;
+    [SerializeField] private float playerLive;
+    public TextMeshProUGUI scoreText;
+
+    //Animaciones
+    private Animator _animator;
+
 
 
     void Start()
     {
+        
         cam = Camera.main.transform;
         groundedScript = GetComponent<Grounded>();
         Debug.Log(gameObject.name);
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
         playerLive = 3;
         gameOver = false;
         canFire = true;
         spores = 0;
+        UpdateScore();
     }
 
     //Funcion que coge el eje horizontal con a,d,< o >, y el eje vertical w, s, ^, v
@@ -77,7 +90,7 @@ public class PlayerController : MonoBehaviour
      
 
     //Rotacion conforme al angulo calculado
-    private void rotate()
+    private void Rotate()
     {
         targetrotation = Quaternion.Euler(0, angle, 0);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetrotation, turnspeed * Time.deltaTime); 
@@ -105,6 +118,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            _animator.SetTrigger("Jump");
             jump();
         }
 
@@ -118,18 +132,27 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(input.x) < 1 && Mathf.Abs(input.y) < 1) return;
 
         CalculateRotation();
-        rotate();
+        Rotate();
         Move();
-
-
-
-       
         PlayerInBounds();
 
-       
-       
-        
-        
+        if (playerLive < 1)
+        {
+            hearts[0].gameObject.SetActive(false);
+        }
+
+        if (playerLive < 2)
+        {
+            hearts[1].gameObject.SetActive(false);
+        }
+
+        if (playerLive < 3)
+        {
+            hearts[2].gameObject.SetActive(false);
+        }
+
+        UpdateScore();
+
     }
        
         
@@ -188,6 +211,7 @@ public class PlayerController : MonoBehaviour
         else if (otherCollider.gameObject.CompareTag("SporeO"))
         {
             spores = spores += 10;
+            dashingPower = dashingPower + 10;
             Destroy(otherCollider.gameObject);
         }
     }
@@ -230,18 +254,31 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Dead()
     {
-        //Antes de esto va la animacion de muerte si llega a funcionar algún día
+        
         yield return new WaitForSeconds(5);      
         SceneManager.LoadScene("Game Over");
 
     }
 
+    private IEnumerator WoundDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+    }
     private void TakeDamage(int damage)
     {
         playerLive -= damage;
-        if(playerLive <= 0)
+        _animator.SetTrigger("Wound");
+        if (playerLive <= 0)
         {
+            _animator.SetBool("Death_a", true);
+            velocity = 0;
+            turnspeed = 0;
             StartCoroutine(Dead());
         }
+    }
+    public void UpdateScore()
+    {
+        
+        scoreText.text = $" x{spores}";
     }
 }

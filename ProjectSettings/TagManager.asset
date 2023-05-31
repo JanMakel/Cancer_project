@@ -12,6 +12,7 @@ TagManager:
   - SporeB
   - SporeS
   - SporeO
+  - proyectil
   layers:
   - Default
   - TransparentFX
