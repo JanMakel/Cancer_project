@@ -38,6 +38,11 @@ public class Buttons : MonoBehaviour
     {
         SceneManager.LoadScene("Controls");
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }   
 
     

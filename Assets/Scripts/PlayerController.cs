@@ -55,21 +55,27 @@ public class PlayerController : MonoBehaviour
     //Animaciones
     private Animator _animator;
 
+    //Menu pause
+    public GameObject pause;
 
-
+    //Audio
+    private AudioSource _audioSource;
+    public AudioClip jumping;
     void Start()
     {
-        
+        Time.timeScale = 1f;
         cam = Camera.main.transform;
         groundedScript = GetComponent<Grounded>();
         Debug.Log(gameObject.name);
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         playerLive = 3;
         gameOver = false;
         canFire = true;
         spores = 0;
         UpdateScore();
+        pause.SetActive(false);
     }
 
     //Funcion que coge el eje horizontal con a,d,< o >, y el eje vertical w, s, ^, v
@@ -105,6 +111,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (transform.position.y < -80)
+        {
+            _animator.SetBool("Death_a", true);
+            velocity = 0;
+            turnspeed = 0;
+            StartCoroutine(Dead());
+        }
         GetInput();
         if (isDashing)
         {
@@ -116,9 +129,17 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Fire());
         }
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+           
+            pause.SetActive(true);
+            Time.timeScale = 0f;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _animator.SetTrigger("Jump");
+            _audioSource.PlayOneShot(jumping, 1);
             jump();
         }
 
@@ -152,6 +173,8 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateScore();
+
+      
 
     }
        
@@ -214,10 +237,15 @@ public class PlayerController : MonoBehaviour
             dashingPower = dashingPower + 10;
             Destroy(otherCollider.gameObject);
         }
+        if (otherCollider.gameObject.CompareTag("home"))
+        {
+            StartCoroutine(TimerWin());
+        }
+
     }
 
 
-   
+
 
 
     private IEnumerator Dash()
@@ -249,6 +277,9 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(pos.x, pos.y, rangeZ);
         }
+
+
+     
     }
 
 
@@ -260,10 +291,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private IEnumerator WoundDelay()
-    {
-        yield return new WaitForSeconds(0.5f);
-    }
+    
     private void TakeDamage(int damage)
     {
         playerLive -= damage;
@@ -275,10 +303,29 @@ public class PlayerController : MonoBehaviour
             turnspeed = 0;
             StartCoroutine(Dead());
         }
+
     }
     public void UpdateScore()
     {
         
         scoreText.text = $" x{spores}";
     }
+
+    public void resume()
+    {
+        pause.SetActive(false);
+        Time.timeScale = 1f;
+
+    }
+    private IEnumerator TimerWin()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("Win");
+    }
+
+
+
+
+
+    
 }
