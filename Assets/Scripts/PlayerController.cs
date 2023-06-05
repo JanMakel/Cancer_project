@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro; 
+using TMPro;
+using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
 
@@ -61,9 +62,16 @@ public class PlayerController : MonoBehaviour
     //Audio
     private AudioSource _audioSource;
     public AudioClip jumping;
+
+    //Post Procesado
+    //public Image gettingDamage;
+    //private float a;
+
     void Start()
     {
+        
         Time.timeScale = 1f;
+        //a = gettingDamage.color.a;
         cam = Camera.main.transform;
         groundedScript = GetComponent<Grounded>();
         Debug.Log(gameObject.name);
@@ -294,6 +302,7 @@ public class PlayerController : MonoBehaviour
     
     private void TakeDamage(int damage)
     {
+        //a += 0.01f;
         playerLive -= damage;
         _animator.SetTrigger("Wound");
         if (playerLive <= 0)
@@ -303,7 +312,7 @@ public class PlayerController : MonoBehaviour
             turnspeed = 0;
             StartCoroutine(Dead());
         }
-
+        //a -= 0.001f;
     }
     public void UpdateScore()
     {
