@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine.UI;
+
 public class PlayerController : MonoBehaviour
 {
 
     [SerializeField]
     private float jumpForce = 20f;
     private Rigidbody _rigidbody;
-    private bool isOnTheGround;
-    private float speed = 10f;
-    private float rotationSpeed = 30f;
+  
     
-    private bool gameOver;
+   
     private int spores;
     private Grounded groundedScript;
 
@@ -46,6 +44,7 @@ public class PlayerController : MonoBehaviour
     //Player en los límites del mapa
 
     private float rangeZ = 15f;
+    [SerializeField]private float deathBot = -80;
 
     //Vidas y UI
 
@@ -63,9 +62,6 @@ public class PlayerController : MonoBehaviour
     private AudioSource _audioSource;
     public AudioClip jumping;
 
-    //Post Procesado
-    //public Image gettingDamage;
-    //private float a;
 
     void Start()
     {
@@ -79,7 +75,7 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
         playerLive = 3;
-        gameOver = false;
+        
         canFire = true;
         spores = 0;
         UpdateScore();
@@ -119,7 +115,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (transform.position.y < -80)
+        if (transform.position.y < deathBot)
         {
             _animator.SetBool("Death_a", true);
             velocity = 0;
@@ -202,7 +198,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundedScript.GetIsGrounded())
         {
-            Debug.Log("Salto");
+            
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
         
@@ -302,7 +298,7 @@ public class PlayerController : MonoBehaviour
     
     private void TakeDamage(int damage)
     {
-        //a += 0.01f;
+       
         playerLive -= damage;
         _animator.SetTrigger("Wound");
         if (playerLive <= 0)
@@ -312,7 +308,7 @@ public class PlayerController : MonoBehaviour
             turnspeed = 0;
             StartCoroutine(Dead());
         }
-        //a -= 0.001f;
+      
     }
     public void UpdateScore()
     {

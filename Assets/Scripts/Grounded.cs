@@ -18,7 +18,7 @@ public class Grounded : MonoBehaviour
    
     private void OnCollisionStay(Collision collider)
     {
-        Debug.Log(collider.gameObject.layer); 
+        
         isGrounded = collider != null && (((1 << collider.gameObject.layer) & platformLayerMask) != 0);
     }
 
